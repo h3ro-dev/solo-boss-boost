@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { submitLead } from "@/lib/lead";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,8 +18,9 @@ const ConversionForm = () => {
     overwhelmLevel: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await submitLead(formData as any);
     toast({
       title: "Assessment Submitted!",
       description: "We'll analyze your business needs and send you a custom AI specialist roadmap.",
