@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { notifyLead, utmFromLocation } from "@/lib/notifyLead";
 import { submitLead } from "@/lib/lead";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,13 @@ const ConversionForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await submitLead(formData as any);
+    try {
+      const page_url = typeof window !== 'undefined' ? window.location.href : '';
+      const payload = { ...(formData as any), page_url, ...utmFromLocation() };
+      notifyLead("contact", payload);
+    } catch (e) {
+      console.warn('notifyLead skipped', e);
+    }
     toast({
       title: "Assessment Submitted!",
       description: "We'll analyze your business needs and send you a custom AI specialist roadmap.",
